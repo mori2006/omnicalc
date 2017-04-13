@@ -10,14 +10,24 @@ class CalculationsController < ApplicationController
     # The special word the user input is in the string @special_word.
     # ================================================================================
 
+    text_split_into_array = @text.split
 
-    @word_count = "Replace this string with your answer."
+    text_character_count_with_spaces = @text.length
 
-    @character_count_with_spaces = "Replace this string with your answer."
+    text_character_count_without_spaces = @text.gsub(" ", "")
 
-    @character_count_without_spaces = "Replace this string with your answer."
+    downcase_special_word = @special_word.downcase
 
-    @occurrences = "Replace this string with your answer."
+    downcase_text_split_into_array = @text.downcase.gsub(/[^a-z0-9\s]/i, '').split
+
+
+    @word_count = text_split_into_array.length
+
+    @character_count_with_spaces = text_character_count_with_spaces
+
+    @character_count_without_spaces = text_character_count_without_spaces.length
+
+    @occurrences = downcase_text_split_into_array.count(downcase_special_word)
 
     # ================================================================================
     # Your code goes above.
@@ -38,7 +48,14 @@ class CalculationsController < ApplicationController
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
 
-    @monthly_payment = "Replace this string with your answer."
+    if
+      @apr!=0
+      calulated_monthly_payment = (@apr/100/12*@principal*(1+@apr/100/12)**(@years*12))/((1+@apr/100/12)**(@years*12)-1)
+    else
+      calulated_monthly_payment = "NaN"
+    end
+
+    @monthly_payment = calulated_monthly_payment
 
     # ================================================================================
     # Your code goes above.
@@ -59,13 +76,15 @@ class CalculationsController < ApplicationController
     #   So if you subtract one time from another, you will get an integer
     #   number of seconds as a result.
     # ================================================================================
+    seconds_between = @ending -@starting
 
-    @seconds = "Replace this string with your answer."
-    @minutes = "Replace this string with your answer."
-    @hours = "Replace this string with your answer."
-    @days = "Replace this string with your answer."
-    @weeks = "Replace this string with your answer."
-    @years = "Replace this string with your answer."
+
+    @seconds = seconds_between
+    @minutes = @seconds/60
+    @hours = @minutes/60
+    @days = @hours/24
+    @weeks = @days/7
+    @years = @weeks/52
 
     # ================================================================================
     # Your code goes above.
@@ -81,28 +100,65 @@ class CalculationsController < ApplicationController
     # Your code goes below.
     # The numbers the user input are in the array @numbers.
     # ================================================================================
+    sorted_numbers = @numbers.sort
 
-    @sorted_numbers = "Replace this string with your answer."
+    num_count = @numbers.count
 
-    @count = "Replace this string with your answer."
+    if
 
-    @minimum = "Replace this string with your answer."
+      num_count.odd?
+      median = sorted_numbers[num_count/2]
+    else
+      median = (sorted_numbers[num_count/2] + sorted_numbers[num_count/2-1])/2
 
-    @maximum = "Replace this string with your answer."
+    end
 
-    @range = "Replace this string with your answer."
+    sum_of_numbers = sorted_numbers.sum
 
-    @median = "Replace this string with your answer."
+    mean_of_numbers = sum_of_numbers/num_count
 
-    @sum = "Replace this string with your answer."
+    sq_diff = []
 
-    @mean = "Replace this string with your answer."
+    sorted_numbers.each do |i|
+      sq_diff.push((i - mean_of_numbers)**2)
+    end
 
-    @variance = "Replace this string with your answer."
+    variance_of_numbers = (sq_diff.sum)/(num_count)
 
-    @standard_deviation = "Replace this string with your answer."
+    num_frequency = []
 
-    @mode = "Replace this string with your answer."
+    sorted_numbers.each do |i|
+      count_of_i = sorted_numbers.count(i)
+      num_frequency.push(count_of_i)
+    end
+
+    position_of_mode = num_frequency.index(num_frequency.max)
+
+    mode = sorted_numbers[position_of_mode]
+
+    
+
+    @sorted_numbers = sorted_numbers
+
+    @count = num_count
+
+    @minimum = @numbers.min
+
+    @maximum = @numbers.max
+
+    @range = @numbers.max - @numbers.min
+
+    @median = median
+
+    @sum = sum_of_numbers
+
+    @mean = mean_of_numbers
+
+    @variance = variance_of_numbers
+
+    @standard_deviation = (@variance)**(0.5)
+
+    @mode = mode
 
     # ================================================================================
     # Your code goes above.
